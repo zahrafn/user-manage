@@ -14,6 +14,7 @@ export async function getUserList(request: IGetUserListRequest,
         params: {
             page: request.page,
             results: request.results,
+            nat:request.nat
         },
     });
 }
