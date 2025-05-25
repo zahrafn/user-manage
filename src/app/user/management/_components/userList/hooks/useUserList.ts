@@ -7,14 +7,16 @@ interface UseUserListProps {
   initialPage?: number;
   initialResults?: number;
   initialData?: IUser[];
-  nat?:string
+  nat?: string;
+  gender?: string;
 }
 
 export function useUserList({
   initialPage = 1,
   initialResults = 20,
   initialData = [],
-  nat
+  nat,
+  gender,
 }: UseUserListProps) {
   const [users, setUsers] = useState<IUser[]>(initialData);
   const [page, setPage] = useState(initialPage);
@@ -26,7 +28,7 @@ export function useUserList({
 
     setLoading(true);
     try {
-      const response = await getUserList({ page, results: initialResults, nat }, apiClient);
+      const response = await getUserList({ page, results: initialResults, nat, gender }, apiClient);
       if (response.results.length === 0) {
         setHasMore(false);
       } else {
@@ -38,7 +40,7 @@ export function useUserList({
     } finally {
       setLoading(false);
     }
-  }, [page, initialResults, loading, hasMore, nat]);
+  }, [page, initialResults, loading, hasMore, nat, gender]);
 
   const resetAndLoadUsers = useCallback(async () => {
     setUsers([]);
@@ -52,8 +54,5 @@ export function useUserList({
     loadUsers,
     hasMore,
     resetAndLoadUsers,
-    setPage,
-    setUsers,
-    setHasMore
   };
 }

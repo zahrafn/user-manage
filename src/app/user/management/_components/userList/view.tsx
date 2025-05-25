@@ -10,12 +10,13 @@ import debounce from 'lodash.debounce';
 
 export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) => {
   const [searchTerm, setSearchTerm] = useState('');
-
+const [gender, setGender] = useState('');
   const { users, loading, loadUsers, hasMore, resetAndLoadUsers } = useUserList({
     initialPage: 2,
     initialResults: 20,
     initialData: initialUsers,
     nat: searchTerm,
+     gender,
   });
 
   const windowHeight = useWindowHeight();
@@ -45,13 +46,18 @@ export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) =
     debouncedSearch(e.target.value);
   };
 
+   const handleGenderChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setGender(e.target.value);
+  };
+
+
   useEffect(() => {
     const resetAndFetch = async () => {
       await resetAndLoadUsers();
       await loadUsers();
     };
     resetAndFetch();
-  }, [searchTerm]);
+  }, [searchTerm, gender]);
 
   const filteredUsers = users;
 
@@ -68,12 +74,24 @@ export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) =
 
   return (
     <div className="p-4">
-      <input
-        type="text"
-        placeholder="Search by nationality (e.g. US, GB, FR)"
-        onChange={handleSearchChange}
-        className="mb-4 p-2 border rounded w-full"
-      />
+          <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Search by nationality (e.g. US, GB, FR)"
+          onChange={handleSearchChange}
+          className="p-2 border rounded w-full"
+        />
+
+        <select
+          value={gender}
+          onChange={handleGenderChange}
+          className="p-2 border rounded"
+        >
+          <option value="">All</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
 
       <List
         ref={listRef}

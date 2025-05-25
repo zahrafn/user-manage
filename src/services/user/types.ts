@@ -1,12 +1,13 @@
 //#region get user list
 
-export interface IGetUserListRequest{
+export interface IGetUserListRequest {
     page: number;
     results: number;
-    nat?:string
+    nat?: string
+    gender?: string;
 }
 
-export interface IGetUserListResponse{
+export interface IGetUserListResponse {
     results: IUser[];
 }
 
