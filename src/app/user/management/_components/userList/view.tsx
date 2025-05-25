@@ -6,6 +6,7 @@ import { useWindowHeight } from './hooks/useWindowHeight';
 import { IUserCardProps } from '../types';
 import { useUserList } from './hooks/useUserList';
 import { UserItem } from '../userCard';
+import debounce from 'lodash.debounce';
 
 export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,7 +17,6 @@ export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) =
     initialData: initialUsers,
     nat: searchTerm,
   });
-
 
   const windowHeight = useWindowHeight();
   const listRef = useRef<any>(null);
@@ -35,22 +35,24 @@ export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) =
     [users.length, loading, loadUsers, hasMore]
   );
 
+  const debouncedSearch = useRef(
+    debounce((value: string) => {
+      setSearchTerm(value);
+    }, 700)
+  ).current;
+
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+    debouncedSearch(e.target.value);
   };
 
-useEffect(() => {
-  const resetAndFetch = async () => {
-    await resetAndLoadUsers();
-    await loadUsers();
-  };
-  resetAndFetch();
-}, [searchTerm]);
+  useEffect(() => {
+    const resetAndFetch = async () => {
+      await resetAndLoadUsers();
+      await loadUsers();
+    };
+    resetAndFetch();
+  }, [searchTerm]);
 
-  // const filteredUsers = users.filter((user) =>
-  //   user.nat.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
-  
   const filteredUsers = users;
 
   const Row = ({ index, style }: { index: number; style: any }) => {
@@ -69,7 +71,6 @@ useEffect(() => {
       <input
         type="text"
         placeholder="Search by nationality (e.g. US, GB, FR)"
-        value={searchTerm}
         onChange={handleSearchChange}
         className="mb-4 p-2 border rounded w-full"
       />
