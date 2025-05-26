@@ -14,6 +14,46 @@ pnpm dev
 bun dev
 ```
 
+# Project Highlights
+ ## 1-Data Fetching Strategy
+Used React Query useInfiniteQuery to implement infinite scrolling for the user list.
+
+The first 10 pages are server-side rendered (SSR) for better SEO and initial load performance.
+
+The remaining pages are fetched via client-side rendering (CSR) using React Query’s infinite loading mechanism.
+
+## 2-Design Patterns & Architecture
+Applied the Compound Component design pattern for building the user card component within the user list.
+
+Created custom React hooks (e.g., for fetching users, exporting to Excel, getting window size) to encapsulate logic and promote code reusability.
+
+Implemented API service functions to centralize API calls and improve maintainability.
+
+## 3-State Management
+Implemented two state management solutions:
+
+React Context for global shared state.
+
+Zustand for lightweight and efficient local state management.
+
+## 4-Styling & Naming Conventions
+
+Used Tailwind CSS for utility-first, responsive, and clean UI styling.
+
+Applied BEM (Block Element Modifier) methodology for consistent and semantic CSS class naming in specific cases.
+
+Utilized Sass Modules for locally scoped styles where needed.
+
+## 5-UX & Performance Enhancements
+Integrated debounced search functionality to optimize API requests during typing.
+
+Added skeleton loading components (shimmer loaders) for both individual components and full app-level loading states using Next.js 15.3 features.
+
+Used Next.js Error Boundaries for clean error handling and fallback UI rendering.
+
+##
+
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
