@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useState, useEffect, ChangeEvent } from 'react';
 import { FixedSizeList as List, ListOnItemsRenderedProps } from 'react-window';
-import { useWindowHeight } from './hooks/useWindowHeight';
+import { useWindowSize } from './hooks/useWindowSize';
 import { useUserList } from './hooks/useUserList';
 import { UserItem } from '../userCard';
 import debounce from 'lodash.debounce';
@@ -13,8 +13,10 @@ import { useUserExcelExport } from './hooks/useUserExcelExport';
 export const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [gender, setGender] = useState('');
-  const windowHeight = useWindowHeight();
+  const { width, height } = useWindowSize();
   const listRef = useRef<any>(null);
+  const mobileBreakPoint = 768;
+  const itemSize = mobileBreakPoint ? 180 : 85; 
 
   const {
     data,
@@ -26,7 +28,7 @@ export const UserList = () => {
 
   const users = data?.pages.flatMap(p => p.results) || [];
 
-    const { handleDownloadFromApi, handleDownloadCurrentPage } = useUserExcelExport();
+  const { handleDownloadFromApi, handleDownloadCurrentPage } = useUserExcelExport();
 
   const handleItemsRendered = useCallback(
     ({ visibleStopIndex }: ListOnItemsRenderedProps) => {
@@ -105,9 +107,9 @@ export const UserList = () => {
 
       <List
         ref={listRef}
-        height={windowHeight - 100}
+        height={height - 100}
         itemCount={users.length}
-        itemSize={85}
+        itemSize={itemSize}
         width={'100%'}
         onItemsRendered={handleItemsRendered}
       >

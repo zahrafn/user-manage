@@ -6,11 +6,15 @@ import styles from "./user-card.module.scss"
 export const UserItem = ({ user }: IUserItemProp) => {
     return (
         <UserCard user={user}>
-            <div className={styles["user__main-info"]}>
-                <UserCard.Avatar />
-                <UserCard.Info />
-                <UserCard.ExtraInfo />
-                <div>
+            <div className={styles["user__container"]}>
+                <div className={styles["user__profile"]}>
+                    <UserCard.Avatar />
+                    <UserCard.Info />
+                </div>
+                <div className={styles["user__contact"]}>
+                    <UserCard.ExtraInfo />
+                </div>
+                <div className={styles["user__actions"]}>
                     <UserCard.CountryFlag />
                     <UserCard.FavoriteButton />
                 </div>
