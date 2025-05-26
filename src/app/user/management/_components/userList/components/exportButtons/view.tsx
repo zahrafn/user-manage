@@ -10,7 +10,7 @@ export const ExportButton = ({ onExport, label, variant = 'primary' }: IExportBu
     return (
         <button
             onClick={onExport}
-            className={`p-2 text-white rounded ${colors[variant]}`}
+            className={`p-2 text-white rounded cursor-pointer hover:opacity-[0.7] transition-all ${colors[variant]}`}
         >
             {label}
         </button>

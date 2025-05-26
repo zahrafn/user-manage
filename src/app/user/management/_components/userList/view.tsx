@@ -11,9 +11,17 @@ import { ExportButton } from './components/exportButtons';
 import { useUserExcelExport } from './hooks/useUserExcelExport';
 import styles from "./user-list.module.scss";
 import { SkeletonUserCard } from './components/skeleton';
+import { useUserSearch } from './hooks/useUserSearch';
 
 export const UserList = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+
+  // search
+    const { 
+    searchTerm, 
+    debouncedSearchTerm, 
+    handleSearchChange 
+  } = useUserSearch('');
+  
   const [gender, setGender] = useState('');
   const { width, height } = useWindowSize();
   const listRef = useRef<any>(null);
@@ -21,16 +29,18 @@ export const UserList = () => {
   const itemSize = width < mobileBreakPoint ? 180 : 85;
   const router = useRouter();
 
+  // infinit scroll
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     refetch,
-  } = useUserList({ nat: searchTerm, gender });
+  } = useUserList({ nat: debouncedSearchTerm, gender });
 
   const users = data?.pages.flatMap(p => p.results) || [];
 
+  // export excel
   const { handleDownloadFromApi, handleDownloadCurrentPage } = useUserExcelExport();
 
   const handleItemsRendered = useCallback(
@@ -55,21 +65,13 @@ export const UserList = () => {
     );
   };
 
-  const debouncedSearch = useRef(
-    debounce((value: string) => setSearchTerm(value), 500)
-  ).current;
-
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.target.value);
-  };
-
   const handleGenderChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setGender(e.target.value);
   };
 
   useEffect(() => {
     refetch();
-  }, [searchTerm, gender]);
+  }, [debouncedSearchTerm, gender]);
 
   return (
     <div className={styles["user-list"]}>
