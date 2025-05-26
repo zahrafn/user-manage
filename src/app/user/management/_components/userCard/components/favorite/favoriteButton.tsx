@@ -19,7 +19,7 @@ const FavoriteButton = () => {
   };
 
   return (
-    <button onClick={toggleFavorite} className={styles.favoriteButton}>
+    <button onClick={toggleFavorite} className={styles["favorite-button"]}>
       {isFav ? <MdFavorite size={24} color="red" /> : <MdFavoriteBorder size={24} color="red" />}
     </button>
   );

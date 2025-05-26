@@ -16,7 +16,9 @@ export const UserItem = ({ user }: IUserItemProp) => {
                 </div>
                 <div className={styles["user__actions"]}>
                     <UserCard.CountryFlag />
-                    <UserCard.FavoriteButton />
+                     <div onClick={e => e.stopPropagation()}>
+                        <UserCard.FavoriteButton />
+                    </div>
                 </div>
             </div>
         </UserCard>
