@@ -1,5 +1,7 @@
+import { ExcelUser } from '../hooks/useUserExcelExport';
+
 export const exportToExcel = async (
-  data: any[],
+  data: ExcelUser[],
   fileName: string,
   sheetName = 'Sheet1'
 ) => {

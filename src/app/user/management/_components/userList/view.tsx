@@ -8,9 +8,7 @@ import { UserItem } from '../userCard';
 import debounce from 'lodash.debounce';
 import { useRouter } from 'next/navigation';
 import { ExportButton } from './components/exportButtons';
-import { exportToExcel } from './utils/exportUtils';
-import { exportAllUsers } from '@/services/user/userServices';
-import { apiClient } from '@/services/api/apiClient';
+import { useUserExcelExport } from './hooks/useUserExcelExport';
 
 export const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,6 +26,8 @@ export const UserList = () => {
 
   const users = data?.pages.flatMap(p => p.results) || [];
 
+    const { handleDownloadFromApi, handleDownloadCurrentPage } = useUserExcelExport();
+
   const handleItemsRendered = useCallback(
     ({ visibleStopIndex }: ListOnItemsRenderedProps) => {
       if (visibleStopIndex >= users.length - 1 && hasNextPage && !isFetchingNextPage) {
@@ -37,29 +37,6 @@ export const UserList = () => {
     [users.length, hasNextPage, isFetchingNextPage]
   );
 
-  const handleDownloadFromApi = async () => {
-    const response = await exportAllUsers(apiClient);
-    const data = response.results;
-    const mappedData = data.map(u => ({
-      Name: `${u.name.first} ${u.name.last}`,
-      Gender: u.gender,
-      Nationality: u.nat,
-      Email: u.email,
-      ID: u.login.uuid,
-    }));
-    exportToExcel(mappedData, 'AllUsersFromApi');
-  };
-
-  const handleDownloadCurrentPage = () => {
-    const mappedData = users.map(u => ({
-      Name: `${u.name.first} ${u.name.last}`,
-      Gender: u.gender,
-      Nationality: u.nat,
-      Email: u.email,
-      ID: u.login.uuid,
-    }));
-    exportToExcel(mappedData, 'CurrentPageUsers');
-  };
 
   const router = useRouter();
 
@@ -120,7 +97,7 @@ export const UserList = () => {
           variant="primary"
         />
         <ExportButton
-          onExport={handleDownloadCurrentPage}
+          onExport={() => handleDownloadCurrentPage(users)}
           label="Export Current Page"
           variant="success"
         />
