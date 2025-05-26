@@ -64,6 +64,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+
     @media (max-width: 768px) {
       flex-direction: column;
       justify-content: flex-start;
@@ -78,7 +79,8 @@
     align-items: flex-end;
     gap: 5px;
     text-align: end;
-     @media (max-width: 768px) {
+
+    @media (max-width: 768px) {
       flex-direction: row;
       align-items: center;
       margin-inline-start: auto;
@@ -90,12 +92,20 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    width: 20%;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 
   &__contact {
     text-align: start;
-     @media (max-width: 768px) {
-     margin-top: 5px;
+    width: 40%;
+
+    @media (max-width: 768px) {
+      margin-top: 5px;
+      width: 100%;
     }
   }
 }

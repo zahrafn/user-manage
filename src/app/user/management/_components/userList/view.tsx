@@ -9,6 +9,7 @@ import debounce from 'lodash.debounce';
 import { useRouter } from 'next/navigation';
 import { ExportButton } from './components/exportButtons';
 import { useUserExcelExport } from './hooks/useUserExcelExport';
+import styles from "./user-list.module.scss";
 
 export const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,7 +17,8 @@ export const UserList = () => {
   const { width, height } = useWindowSize();
   const listRef = useRef<any>(null);
   const mobileBreakPoint = 768;
-  const itemSize = mobileBreakPoint ? 180 : 85; 
+  const itemSize = width < mobileBreakPoint ? 180 : 85;
+  const router = useRouter();
 
   const {
     data,
@@ -38,9 +40,6 @@ export const UserList = () => {
     },
     [users.length, hasNextPage, isFetchingNextPage]
   );
-
-
-  const router = useRouter();
 
   const Row = ({ index, style }: { index: number; style: any }) => {
     const user = users[index];
@@ -72,8 +71,8 @@ export const UserList = () => {
   }, [searchTerm, gender]);
 
   return (
-    <div className="p-4">
-      <div className="flex gap-2 mb-4">
+    <div className={styles["user-list"]}>
+      <div className={styles["user-list__actions"]}>
         <input
           type="text"
           placeholder="Search by nationality (e.g. US, GB, FR)"
@@ -92,7 +91,7 @@ export const UserList = () => {
         </select>
       </div>
 
-      <div className="flex gap-2 mb-4">
+      <div className={styles["user-list__actions"]}>
         <ExportButton
           onExport={handleDownloadFromApi}
           label="Export All from API"
@@ -107,19 +106,23 @@ export const UserList = () => {
 
       <List
         ref={listRef}
-        height={height - 100}
+        height={height - 140}
         itemCount={users.length}
         itemSize={itemSize}
         width={'100%'}
         onItemsRendered={handleItemsRendered}
+        style={{ padding: "10px" }}
       >
         {Row}
       </List>
 
-      <div className="h-12 flex justify-center items-center">
-        {isFetchingNextPage && <p>Loading....</p>}
-        {!hasNextPage && <p>No more users</p>}
-      </div>
+
+      {isFetchingNextPage &&
+        <div className={styles["user-list__status-message"]}> <p>Loading....</p> </div>}
+
+      {!hasNextPage &&
+        <div className={styles["user-list__status-message"]}> <p>No more users</p> </div>}
     </div>
+
   );
 };

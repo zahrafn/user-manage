@@ -1,0 +1,19 @@
+.user-list {
+    width: 100%;
+    padding: 0 5px;
+
+    &__status-message {
+        position: absolute;
+        width: 99%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 10px;
+    }
+}
