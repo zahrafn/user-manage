@@ -1,12 +1,12 @@
 
 import styles from './user-card.module.scss';
 import CountryFlag from './components/countryFlag';
-import FavoriteButton from './components/favoriteButton';
 import Info from './components/userInfo';
 import { UserCardProvider } from './context/userCardContext';
 import Avatar from './components/avatar';
 import { IUserCardProps } from '../types';
 import UserExtraInfo from './components/userExtraInfo';
+import FavoriteButton from './components/favorite/favoriteButton';
 
 interface UserCardProps {
   user: IUserCardProps;
