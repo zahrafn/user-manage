@@ -16,4 +16,14 @@
         gap: 7px;
         margin-bottom: 10px;
     }
+
+    &__load-wrap{
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 0;
+        left: 5px;
+        right: 5px;
+        gap: 7px;
+    }
 }

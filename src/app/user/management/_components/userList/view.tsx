@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { ExportButton } from './components/exportButtons';
 import { useUserExcelExport } from './hooks/useUserExcelExport';
 import styles from "./user-list.module.scss";
+import { SkeletonUserCard } from './components/skeleton';
 
 export const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -117,8 +118,13 @@ export const UserList = () => {
       </List>
 
 
-      {isFetchingNextPage &&
-        <div className={styles["user-list__status-message"]}> <p>Loading....</p> </div>}
+      {isFetchingNextPage && (
+        <div className={styles["user-list__load-wrap"]}>
+          {[...Array(7)].map((_, i) => (
+            <SkeletonUserCard key={i} />
+          ))}
+        </div>
+      )}
 
       {!hasNextPage &&
         <div className={styles["user-list__status-message"]}> <p>No more users</p> </div>}
