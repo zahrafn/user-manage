@@ -1,3 +1,3 @@
 export const UserUrls ={
-    getUser: "/api"
+    main: "/api"
 }

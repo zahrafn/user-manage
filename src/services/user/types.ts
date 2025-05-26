@@ -38,6 +38,7 @@ export interface INameProps {
 
 export interface ILoginProps {
     username: string;
+    uuid:string;
 }
 
 export interface IStreetProps {
@@ -50,6 +51,19 @@ export interface ILocationProps {
     city: string;
     state: string;
     country: string;
+}
+
+//#endregion
+
+
+//#region get user profile
+
+export interface IGetUserProfileRequest {
+    uuid: string;
+}
+
+export interface IGetUserProfileResponse {
+    results: IUser[];
 }
 
 //#endregion

@@ -7,16 +7,17 @@ import { IUserCardProps } from '../types';
 import { useUserList } from './hooks/useUserList';
 import { UserItem } from '../userCard';
 import debounce from 'lodash.debounce';
+import { useRouter } from 'next/navigation';
 
 export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) => {
   const [searchTerm, setSearchTerm] = useState('');
-const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('');
   const { users, loading, loadUsers, hasMore, resetAndLoadUsers } = useUserList({
     initialPage: 2,
     initialResults: 20,
     initialData: initialUsers,
     nat: searchTerm,
-     gender,
+    gender,
   });
 
   const windowHeight = useWindowHeight();
@@ -46,7 +47,7 @@ const [gender, setGender] = useState('');
     debouncedSearch(e.target.value);
   };
 
-   const handleGenderChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleGenderChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setGender(e.target.value);
   };
 
@@ -61,10 +62,16 @@ const [gender, setGender] = useState('');
 
   const filteredUsers = users;
 
+  const router = useRouter();
+
   const Row = ({ index, style }: { index: number; style: any }) => {
     const user = filteredUsers[index];
+    const handleClick = () => {
+      router.push(`/user/${user.login.uuid}`);
+    };
+
     return (
-      <div style={style}>
+      <div style={style} onClick={handleClick}>
         <UserItem user={user} />
       </div>
     );
@@ -74,7 +81,7 @@ const [gender, setGender] = useState('');
 
   return (
     <div className="p-4">
-          <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-4">
         <input
           type="text"
           placeholder="Search by nationality (e.g. US, GB, FR)"
