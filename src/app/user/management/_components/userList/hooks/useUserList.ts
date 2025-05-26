@@ -1,58 +1,21 @@
 import { apiClient } from "@/services/api/apiClient";
-import { IUser } from "@/services/user/types";
 import { getUserList } from "@/services/user/userServices";
-import { useState, useCallback } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-interface UseUserListProps {
-  initialPage?: number;
-  initialResults?: number;
-  initialData?: IUser[];
-  nat?: string;
-  gender?: string;
+interface IUseUserListProps {
+  nat: string;
+  gender: string
 }
 
-export function useUserList({
-  initialPage = 1,
-  initialResults = 20,
-  initialData = [],
-  nat,
-  gender,
-}: UseUserListProps) {
-  const [users, setUsers] = useState<IUser[]>(initialData);
-  const [page, setPage] = useState(initialPage);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-
-  const loadUsers = useCallback(async () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    try {
-      const response = await getUserList({ page, results: initialResults, nat, gender }, apiClient);
-      if (response.results.length === 0) {
-        setHasMore(false);
-      } else {
-        setUsers((prev) => [...prev, ...response.results]);
-        setPage((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.error("Error loading users:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, initialResults, loading, hasMore, nat, gender]);
-
-  const resetAndLoadUsers = useCallback(async () => {
-    setUsers([]);
-    setPage(1);
-    setHasMore(true);
-  }, []);
-
-  return {
-    users,
-    loading,
-    loadUsers,
-    hasMore,
-    resetAndLoadUsers,
-  };
-}
+export const useUserList = (filters: IUseUserListProps) => {
+  return useInfiniteQuery({
+    queryKey: ['userList', filters],
+    queryFn: ({ pageParam = 1 }) =>
+      getUserList({ page: pageParam, results: 20, ...filters }, apiClient),
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.results.length === 0) return undefined;
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
+  });
+};

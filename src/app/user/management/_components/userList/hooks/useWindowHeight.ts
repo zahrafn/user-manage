@@ -1,16 +1,19 @@
+
+
 import { useState, useEffect } from 'react';
 
-export function useWindowHeight() {
-  const [windowHeight, setWindowHeight] = useState<number>(typeof window !== 'undefined' ? window.innerHeight : 0);
+export const useWindowHeight = () => {
+  const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    function handleResize() {
-      setWindowHeight(window.innerHeight);
-    }
+    const updateHeight = () => {
+      setHeight(window.innerHeight);
+    };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
   }, []);
 
-  return windowHeight;
-}
+  return height;
+};
