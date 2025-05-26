@@ -8,6 +8,10 @@ import { useUserList } from './hooks/useUserList';
 import { UserItem } from '../userCard';
 import debounce from 'lodash.debounce';
 import { useRouter } from 'next/navigation';
+import { ExportButton } from './components/exportButtons';
+import { exportToExcel } from './utils/exportUtils';
+import { exportAllUsers } from '@/services/user/userServices';
+import { apiClient } from '@/services/api/apiClient';
 
 export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,6 +31,34 @@ export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) =
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  const handleDownloadFromApi = async () => {
+    const response = await exportAllUsers(apiClient);
+    const data = response.results;
+
+    const mappedData = data.map((u: any) => ({
+      Name: `${u.name.first} ${u.name.last}`,
+      Gender: u.gender,
+      Nationality: u.nat,
+      Email: u.email,
+      ID: u.login.uuid,
+    }));
+
+    exportToExcel(mappedData, 'AllUsersFromApi');
+  };
+
+  const handleDownloadCurrentPage = () => {
+    const mappedData = filteredUsers.map((u: any) => ({
+      Name: `${u.name.first} ${u.name.last}`,
+      Gender: u.gender,
+      Nationality: u.nat,
+      Email: u.email,
+      ID: u.login.uuid,
+    }));
+
+    exportToExcel(mappedData, 'CurrentPageUsers');
+
+  };
 
   const handleItemsRendered = useCallback(
     ({ visibleStopIndex }: ListOnItemsRenderedProps) => {
@@ -98,6 +130,20 @@ export const UserList = ({ initialUsers }: { initialUsers: IUserCardProps[] }) =
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
+      </div>
+
+      <div className="flex gap-2 mb-4">
+        <ExportButton
+          onExport={handleDownloadFromApi}
+          label="Export All from API"
+          variant="primary"
+        />
+        <ExportButton
+          onExport={handleDownloadCurrentPage}
+          label="Export Current Page"
+          variant="success"
+        />
+
       </div>
 
       <List

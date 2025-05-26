@@ -35,3 +35,14 @@ export async function getUserProfile(
     params: { uuid },
   });
 }
+
+// Export All Users
+export async function exportAllUsers(
+  apiInstance: ApiInstanceType
+) {
+  return apiInstance<IGetUserListResponse>({
+    url: UserUrls.main,
+    method: "GET",
+    params: { results: 1000 },
+  });
+}
