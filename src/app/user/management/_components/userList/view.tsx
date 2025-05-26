@@ -5,7 +5,6 @@ import { FixedSizeList as List, ListOnItemsRenderedProps } from 'react-window';
 import { useWindowSize } from './hooks/useWindowSize';
 import { useUserList } from './hooks/useUserList';
 import { UserItem } from '../userCard';
-import debounce from 'lodash.debounce';
 import { useRouter } from 'next/navigation';
 import { ExportButton } from './components/exportButtons';
 import { useUserExcelExport } from './hooks/useUserExcelExport';
@@ -17,7 +16,6 @@ export const UserList = () => {
 
   // search
     const { 
-    searchTerm, 
     debouncedSearchTerm, 
     handleSearchChange 
   } = useUserSearch('');
