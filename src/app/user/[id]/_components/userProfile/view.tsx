@@ -5,6 +5,7 @@ import { UserProfilePageProps } from "./types";
 import styles from "./user-profile.module.scss";
 
 export const UserProfilePage = ({ user }: UserProfilePageProps) => {
+  
   return (
     <UserCard user={user}>
       <div className={styles["user-profile"]}>
@@ -16,8 +17,7 @@ export const UserProfilePage = ({ user }: UserProfilePageProps) => {
             </h2>
             <p className={styles["user-profile__email"]}>{user.email}</p>
           </div>
-          <UserCard.FavoriteButton 
-           
+          <UserCard.FavoriteButton
           />
         </div>
       </div>
